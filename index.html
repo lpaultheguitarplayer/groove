@@ -1,0 +1,1559 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Groove</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <style>
+      body > .container {
+        margin-top: 6rem;
+      }
+
+      nav.navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+      }
+
+      .player #bpm {
+        position: relative;
+        top: 5px;
+      }
+
+      .player output {
+        width: 100px;
+      }
+
+      .player #groove {
+        margin-right: 0.5rem;
+      }
+
+      .player #addSongSection {
+        width: 40px;
+        margin-right: 0.5rem;
+      }
+
+      button.removeSongSection {
+        float: right;
+      }
+
+      .card-header .form-switch {
+        position: relative;
+        top: 7px;
+      }
+
+      .accordion-header .title {
+          padding-left: 1rem;
+      }
+
+      .accordion-header input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid m-1">
+        <a class="navbar-brand" href="#">Groove</a>
+        <div class="player">
+          <div class="wrapper">
+              <input class="bpm" type="range" value="120" min="60" max="360" id="bpm" oninput="this.nextElementSibling.value = this.value + ' bpm';">
+              <output class="text-center">120 bpm</output>
+              <button type="button" id="groove" data-bs-toggle="modal" data-bs-target="#tracksModal" class="btn btn-light">Groove</button>
+              <button type="button" id="addSongSection" class="btn btn-secondary">+</button>
+              <button type="button" id="reset" class="btn btn-secondary">Reset</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row justify-content-md-center song">
+        <div class="col-6 song-section-column">
+          <div class="song-section card m-3">
+            <div class="card-header">
+              <div class="row">
+                <div class="col">
+                  <div class="form-check checkbox-wrapper form-switch">
+                    <span>Section #1</span>
+                    <input class="form-check-input songSectionEnabled" type="checkbox" value="" checked="checked">
+                  </div>
+                </div>
+                <div class="col">
+                  <button type="button" class="btn btn-dark removeSongSection">✕</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="barsCount" class="form-label w-100">Bars count:</label>
+                <input class="w-75 barsCount" type="range" value="1" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' bars' : this.value + ' bar'">
+                <output style="position: relative; top: -2px;">1 bar</output>
+              </div>
+              <div class="mb-3">
+                <div class="row">
+                  <span>Time signature:</span>
+                  <div class="col align-self-center">
+                    <input class="w-50 timeSignatureBeats" type="range" value="26" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' beats of' : this.value + ' beat of'">
+                    <output style="position: relative; top: -2px;">26 beats of</output>
+                  </div>
+                  <div class="col">
+                    <div class="input-group">
+                      <span class="input-group-text">Note length: 1 / </span>
+                      <select class="form-select timeSignatureNoteLength" aria-label="Scale">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="8">8</option>
+                        <option value="16" selected="selected">16</option>
+                        <option value="32">32</option>
+                        <option value="64">64</option>
+                        <option value="128">128</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Grid resolution:</span>
+                  <select class="form-select gridResolution">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="8">8</option>
+                    <option value="16" selected="">16</option>
+                    <option value="32">32</option>
+                    <option value="64">64</option>
+                    <option value="128">128</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Scale</span>
+                  <select class="form-select scale" aria-label="Scale">
+                    <option value="HIRAJOSHI" selected="">Hirajoshi</option>
+                    <option value="HIRAJOSHI_2">Hirajoshi 2</option>
+                    <option value="IWATO">Iwato</option>
+                    <option value="KUMOI">Kumoi</option>
+                    <option value="PELOG">Pelog</option>
+                    <option value="DOUBLE_HARMONIC">Double harmonic</option>
+                    <option value="SIX_TONE_SYMMETRICAL">Six tone symmetrical</option>
+                    <option value="LOCRIAN">Locrian</option>
+                    <option value="PHRYGIAN">Phrygian</option>
+                    <option value="DIMINISHED_HALF">Diminished half</option>
+                  </select>
+                </div>
+              </div>
+              <div class="accordion" id="songSectionInstruments-0">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemDrums-0" aria-expanded="false" aria-controls="accordionItemDrums-0">
+                      <input class="form-check-input drumsEnabled" type="checkbox" name="drumsEnabled">
+                      <span class="title">Drums</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemDrums-0" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-0" style="">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Kick pattern</span>
+                          <input type="text" class="form-control kickPattern" value=".-..-.--.--.-." placeholder=".-..-.--.--.-.">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Snare pattern</span>
+                          <input type="text" class="form-control snarePattern" value="--------.-------" placeholder="--------.-------">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Rhythm cymbal pattern</span>
+                          <input type="text" class="form-control rhythmCymbalPattern" value=".---" placeholder=".---">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Accent cymbal patterns</span>
+                          <input type="text" class="form-control accentCymbalPatterns" value="-.-.-, -.....-.-">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input accentChokedCymbals" type="checkbox" name="ghostNoteType">
+                          <label class="form-check-label" for="accentChokedCymbals">Accent choked cymbals</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Fill patterns</span>
+                          <input type="text" class="form-control fillPatterns" value="kss, sksskskss, skk">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input snareGhostNotes" type="checkbox" name="ghostNoteType" checked="checked">
+                          <label class="form-check-label" for="snareGhostNotes">Snare ghost notes</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input cymbalGhostNotes" type="checkbox" name="ghostNoteType" value="">
+                          <label class="form-check-label" for="cymbalGhostNotes">Cymbals ghost notes</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input cymbalsIntense" type="checkbox" value="" checked="checked">
+                          <label class="form-check-label" for="cymbalsIntense">Intense rhythm cymbals</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="changeCymbalNoteEveryNHits" class="form-label w-100">Change rhythm cymbal note every:</label>
+                        <input class="w-75 changeCymbalNoteEveryNHits" type="range" value="8" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' hits' : this.value + ' hit'">
+                        <output style="position: relative; top: -2px;">8 hits</output>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input addAccentAfterChangingRhythmCymbal" type="checkbox" value="" checked="checked">
+                          <label class="form-check-label" for="addAccentAfterChangingRhythmCymbal">Add accent after changing rhythm cymbal note</label>
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <label for="putFillsAfterNBars" class="form-label w-100">Put fills after every:</label>
+                        <input class="w-75 putFillsAfterNBars" type="range" value="4" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' bars' : this.value + ' bar'">
+                        <output style="position: relative; top: -2px;">4 bars</output>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemBass-0" aria-expanded="false" aria-controls="accordionItemBass-0">
+                      <input class="form-check-input bassEnabled" type="checkbox" name="bassEnabled">
+                      <span class="title">Bass</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemBass-0" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-0" style="">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select bassNoteLength" aria-label="bassNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input bassDynamicNoteLength" type="checkbox" name="bassDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="bassDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern</span>
+                          <input type="text" class="form-control bassDegreeNotesPattern" value="10-3010-20--10--30-20">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input bassStickToKick" type="checkbox" name="bassStickToKick" oninput="" checked="checked">
+                          <label class="form-check-label" for="bassStickToKick">Stick to kick pattern (ignore pattern above)</label>
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Dead/muted notes patterns</span>
+                          <input type="text" class="form-control bassDeadNotesPatterns" value="d--">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemGuitarOverdrive-0" aria-expanded="false" aria-controls="accordionItemGuitarOverdrive-0">
+                      <input class="form-check-input guitarOverdriveEnabled" type="checkbox" name="guitarOverdriveEnabled" checked="checked">
+                      <span class="title">Overdrive guitar</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemGuitarOverdrive-0" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-0" style="">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select guitarOverdriveNoteLength" aria-label="guitarOverdriveNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input guitarOverdriveDynamicNoteLength" type="checkbox" name="guitarOverdriveDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="guitarOverdriveDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern left</span>
+                          <input type="text" class="form-control guitarOverdriveDegreeNotesPaternLeft" value="12-3312-22--12--33-1222-3312-22--12---">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern right</span>
+                          <input type="text" class="form-control guitarOverdriveDegreeNotesPaternRight" value="">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input guitarOverdriveStickToKick" type="checkbox" name="guitarOverdriveStickToKick" oninput="">
+                          <label class="form-check-label" for="guitarOverdriveStickToKick">Stick to kick pattern (ignore patterns above)</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Dead/muted/harmonic notes patterns left</span>
+                          <input type="text" class="form-control guitarOverdriveDeadNotesPatternsLeft" value="m--">
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Dead/muted/harmonic notes patterns right</span>
+                          <input type="text" class="form-control guitarOverdriveDeadNotesPatternsRight" value="m--">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemGuitarClean-0" aria-expanded="false" aria-controls="accordionItemGuitarClean-0">
+                      <input class="form-check-input guitarCleanEnabled" type="checkbox" name="guitarCleanEnabled">
+                      <span class="title">Clean guitar</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemGuitarClean-0" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-0">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select guitarCleanNoteLength" aria-label="guitarCleanNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input guitarCleanDynamicNoteLength" type="checkbox" name="guitarCleanDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="guitarCleanDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern left</span>
+                          <input type="text" class="form-control guitarCleanDegreeNotesPaternLeft" value="34---------------13---------------23---------------24---14-----------">
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern right</span>
+                          <input type="text" class="form-control guitarCleanDegreeNotesPaternRight" value="55---------------34---------------44---------------23---13-----------">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemSynth-0" aria-expanded="false" aria-controls="accordionItemSynth-0">
+                      <input class="form-check-input synthEnabled" type="checkbox" name="synthEnabled">
+                      <span class="title">Synth</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemSynth-0" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-0">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select synthNoteLength" aria-label="synthNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input synthDynamicNoteLength" type="checkbox" name="synthDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="synthDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern</span>
+                          <input type="text" class="form-control synthDegreeNotesPatern" value="21---------------11---------------">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 song-section-column">
+          <div class="song-section card m-3">
+            <div class="card-header">
+              <div class="row">
+                <div class="col">
+                  <div class="form-check checkbox-wrapper form-switch">
+                    <span>Section #2</span>
+                    <input class="form-check-input songSectionEnabled" type="checkbox" value="" checked="checked">
+                  </div>
+                </div>
+                <div class="col">
+                  <button type="button" class="btn btn-dark removeSongSection">✕</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="barsCount" class="form-label w-100">Bars count:</label>
+                <input class="w-75 barsCount" type="range" value="4" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' bars' : this.value + ' bar'">
+                <output style="position: relative; top: -2px;">4 bars</output>
+              </div>
+              <div class="mb-3">
+                <div class="row">
+                  <span>Time signature:</span>
+                  <div class="col align-self-center">
+                    <input class="w-50 timeSignatureBeats" type="range" value="4" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' beats of' : this.value + ' beat of'">
+                    <output style="position: relative; top: -2px;">4 beats of</output>
+                  </div>
+                  <div class="col">
+                    <div class="input-group">
+                      <span class="input-group-text">Note length: 1 / </span>
+                      <select class="form-select timeSignatureNoteLength" aria-label="Scale">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="4" selected="selected">4</option>
+                        <option value="8">8</option>
+                        <option value="16">16</option>
+                        <option value="32">32</option>
+                        <option value="64">64</option>
+                        <option value="128">128</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Grid resolution:</span>
+                  <select class="form-select gridResolution">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="8">8</option>
+                    <option value="16" selected="">16</option>
+                    <option value="32">32</option>
+                    <option value="64">64</option>
+                    <option value="128">128</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Scale</span>
+                  <select class="form-select scale" aria-label="Scale">
+                    <option value="HIRAJOSHI" selected="">Hirajoshi</option>
+                    <option value="HIRAJOSHI_2">Hirajoshi 2</option>
+                    <option value="IWATO">Iwato</option>
+                    <option value="KUMOI">Kumoi</option>
+                    <option value="PELOG">Pelog</option>
+                    <option value="DOUBLE_HARMONIC">Double harmonic</option>
+                    <option value="SIX_TONE_SYMMETRICAL">Six tone symmetrical</option>
+                    <option value="LOCRIAN">Locrian</option>
+                    <option value="PHRYGIAN">Phrygian</option>
+                    <option value="DIMINISHED_HALF">Diminished half</option>
+                  </select>
+                </div>
+              </div>
+              <div class="accordion" id="songSectionInstruments-1">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemDrums-1" aria-expanded="false" aria-controls="accordionItemDrums-1">
+                      <input class="form-check-input drumsEnabled" type="checkbox" name="drumsEnabled" checked="checked">
+                      <span class="title">Drums</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemDrums-1" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-1" style="">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Kick pattern</span>
+                          <input type="text" class="form-control kickPattern" value=".-..-.--.--.-." placeholder=".-..-.--.--.-.">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Snare pattern</span>
+                          <input type="text" class="form-control snarePattern" value="--------.-------" placeholder="--------.-------">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Rhythm cymbal pattern</span>
+                          <input type="text" class="form-control rhythmCymbalPattern" value=".---" placeholder=".---">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Accent cymbal patterns</span>
+                          <input type="text" class="form-control accentCymbalPatterns" value="-.-.-, -.....-.-">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input accentChokedCymbals" type="checkbox" name="ghostNoteType">
+                          <label class="form-check-label" for="accentChokedCymbals">Accent choked cymbals</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Fill patterns</span>
+                          <input type="text" class="form-control fillPatterns" value="skk">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input snareGhostNotes" type="checkbox" name="ghostNoteType" checked="checked">
+                          <label class="form-check-label" for="snareGhostNotes">Snare ghost notes</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input cymbalGhostNotes" type="checkbox" name="ghostNoteType" value="">
+                          <label class="form-check-label" for="cymbalGhostNotes">Cymbals ghost notes</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input cymbalsIntense" type="checkbox" value="" checked="checked">
+                          <label class="form-check-label" for="cymbalsIntense">Intense rhythm cymbals</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="changeCymbalNoteEveryNHits" class="form-label w-100">Change rhythm cymbal note every:</label>
+                        <input class="w-75 changeCymbalNoteEveryNHits" type="range" value="8" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' hits' : this.value + ' hit'">
+                        <output style="position: relative; top: -2px;">8 hits</output>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input addAccentAfterChangingRhythmCymbal" type="checkbox" value="" checked="checked">
+                          <label class="form-check-label" for="addAccentAfterChangingRhythmCymbal">Add accent after changing rhythm cymbal note</label>
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <label for="putFillsAfterNBars" class="form-label w-100">Put fills after every:</label>
+                        <input class="w-75 putFillsAfterNBars" type="range" value="2" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' bars' : this.value + ' bar'">
+                        <output style="position: relative; top: -2px;">2 bars</output>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemBass-1" aria-expanded="false" aria-controls="accordionItemBass-1">
+                      <input class="form-check-input bassEnabled" type="checkbox" name="bassEnabled" checked="checked">
+                      <span class="title">Bass</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemBass-1" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-1" style="">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select bassNoteLength" aria-label="bassNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input bassDynamicNoteLength" type="checkbox" name="bassDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="bassDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern</span>
+                          <input type="text" class="form-control bassDegreeNotesPattern" value="11-3211-21--11--32-21">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input bassStickToKick" type="checkbox" name="bassStickToKick" oninput="" checked="checked">
+                          <label class="form-check-label" for="bassStickToKick">Stick to kick pattern (ignore pattern above)</label>
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Dead/muted notes patterns</span>
+                          <input type="text" class="form-control bassDeadNotesPatterns" value="d--">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemGuitarOverdrive-1" aria-expanded="false" aria-controls="accordionItemGuitarOverdrive-1">
+                      <input class="form-check-input guitarOverdriveEnabled" type="checkbox" name="guitarOverdriveEnabled" checked="checked">
+                      <span class="title">Overdrive guitar</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemGuitarOverdrive-1" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-1" style="">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select guitarOverdriveNoteLength" aria-label="guitarOverdriveNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input guitarOverdriveDynamicNoteLength" type="checkbox" name="guitarOverdriveDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="guitarOverdriveDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern left</span>
+                          <input type="text" class="form-control guitarOverdriveDegreeNotesPaternLeft" value="11-3211-21--11--32-21">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern right</span>
+                          <input type="text" class="form-control guitarOverdriveDegreeNotesPaternRight" value="11-3211-21--11--32-21">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input guitarOverdriveStickToKick" type="checkbox" name="guitarOverdriveStickToKick" oninput="" checked="checked">
+                          <label class="form-check-label" for="guitarOverdriveStickToKick">Stick to kick pattern (ignore patterns above)</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Dead/muted/harmonic notes patterns left</span>
+                          <input type="text" class="form-control guitarOverdriveDeadNotesPatternsLeft" value="m--">
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Dead/muted/harmonic notes patterns right</span>
+                          <input type="text" class="form-control guitarOverdriveDeadNotesPatternsRight" value="d--">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemGuitarClean-1" aria-expanded="false" aria-controls="accordionItemGuitarClean-1">
+                      <input class="form-check-input guitarCleanEnabled" type="checkbox" name="guitarCleanEnabled">
+                      <span class="title">Clean guitar</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemGuitarClean-1" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-1">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select guitarCleanNoteLength" aria-label="guitarCleanNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input guitarCleanDynamicNoteLength" type="checkbox" name="guitarCleanDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="guitarCleanDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern left</span>
+                          <input type="text" class="form-control guitarCleanDegreeNotesPaternLeft" value="34---------------13---------------23---------------24---14-----------">
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern right</span>
+                          <input type="text" class="form-control guitarCleanDegreeNotesPaternRight" value="55---------------34---------------44---------------23---13-----------">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemSynth-1" aria-expanded="false" aria-controls="accordionItemSynth-1">
+                      <input class="form-check-input synthEnabled" type="checkbox" name="synthEnabled">
+                      <span class="title">Synth</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemSynth-1" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-1">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select synthNoteLength" aria-label="synthNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input synthDynamicNoteLength" type="checkbox" name="synthDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="synthDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern</span>
+                          <input type="text" class="form-control synthDegreeNotesPatern" value="21---------------11---------------">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 song-section-column">
+          <div class="song-section card m-3">
+            <div class="card-header">
+              <div class="row">
+                <div class="col">
+                  <div class="form-check checkbox-wrapper form-switch">
+                    <span>Section #3</span>
+                    <input class="form-check-input songSectionEnabled" type="checkbox" value="" checked="checked">
+                  </div>
+                </div>
+                <div class="col">
+                  <button type="button" class="btn btn-dark removeSongSection">✕</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="barsCount" class="form-label w-100">Bars count:</label>
+                <input class="w-75 barsCount" type="range" value="4" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' bars' : this.value + ' bar'">
+                <output style="position: relative; top: -2px;">4 bars</output>
+              </div>
+              <div class="mb-3">
+                <div class="row">
+                  <span>Time signature:</span>
+                  <div class="col align-self-center">
+                    <input class="w-50 timeSignatureBeats" type="range" value="4" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' beats of' : this.value + ' beat of'">
+                    <output style="position: relative; top: -2px;">4 beats of</output>
+                  </div>
+                  <div class="col">
+                    <div class="input-group">
+                      <span class="input-group-text">Note length: 1 / </span>
+                      <select class="form-select timeSignatureNoteLength" aria-label="Scale">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="4" selected="selected">4</option>
+                        <option value="8">8</option>
+                        <option value="16">16</option>
+                        <option value="32">32</option>
+                        <option value="64">64</option>
+                        <option value="128">128</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Grid resolution:</span>
+                  <select class="form-select gridResolution">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="8">8</option>
+                    <option value="16" selected="">16</option>
+                    <option value="32">32</option>
+                    <option value="64">64</option>
+                    <option value="128">128</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Scale</span>
+                  <select class="form-select scale" aria-label="Scale">
+                    <option value="HIRAJOSHI" selected="">Hirajoshi</option>
+                    <option value="HIRAJOSHI_2">Hirajoshi 2</option>
+                    <option value="IWATO">Iwato</option>
+                    <option value="KUMOI">Kumoi</option>
+                    <option value="PELOG">Pelog</option>
+                    <option value="DOUBLE_HARMONIC">Double harmonic</option>
+                    <option value="SIX_TONE_SYMMETRICAL">Six tone symmetrical</option>
+                    <option value="LOCRIAN">Locrian</option>
+                    <option value="PHRYGIAN">Phrygian</option>
+                    <option value="DIMINISHED_HALF">Diminished half</option>
+                  </select>
+                </div>
+              </div>
+              <div class="accordion" id="songSectionInstruments-2">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemDrums-2" aria-expanded="false" aria-controls="accordionItemDrums-2">
+                      <input class="form-check-input drumsEnabled" type="checkbox" name="drumsEnabled" checked="checked">
+                      <span class="title">Drums</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemDrums-2" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-2" style="">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Kick pattern</span>
+                          <input type="text" class="form-control kickPattern" value=".-..-.--.--.-." placeholder=".-..-.--.--.-.">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Snare pattern</span>
+                          <input type="text" class="form-control snarePattern" value="--------.-------" placeholder="--------.-------">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Rhythm cymbal pattern</span>
+                          <input type="text" class="form-control rhythmCymbalPattern" value=".---" placeholder=".---">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Accent cymbal patterns</span>
+                          <input type="text" class="form-control accentCymbalPatterns" value="-.-.-, -.....-.-">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input accentChokedCymbals" type="checkbox" name="ghostNoteType">
+                          <label class="form-check-label" for="accentChokedCymbals">Accent choked cymbals</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Fill patterns</span>
+                          <input type="text" class="form-control fillPatterns" value="skk, lkss">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input snareGhostNotes" type="checkbox" name="ghostNoteType" checked="checked">
+                          <label class="form-check-label" for="snareGhostNotes">Snare ghost notes</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input cymbalGhostNotes" type="checkbox" name="ghostNoteType" value="">
+                          <label class="form-check-label" for="cymbalGhostNotes">Cymbals ghost notes</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input cymbalsIntense" type="checkbox" value="" checked="checked">
+                          <label class="form-check-label" for="cymbalsIntense">Intense rhythm cymbals</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="changeCymbalNoteEveryNHits" class="form-label w-100">Change rhythm cymbal note every:</label>
+                        <input class="w-75 changeCymbalNoteEveryNHits" type="range" value="8" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' hits' : this.value + ' hit'">
+                        <output style="position: relative; top: -2px;">8 hits</output>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input addAccentAfterChangingRhythmCymbal" type="checkbox" value="" checked="checked">
+                          <label class="form-check-label" for="addAccentAfterChangingRhythmCymbal">Add accent after changing rhythm cymbal note</label>
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <label for="putFillsAfterNBars" class="form-label w-100">Put fills after every:</label>
+                        <input class="w-75 putFillsAfterNBars" type="range" value="4" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' bars' : this.value + ' bar'">
+                        <output style="position: relative; top: -2px;">4 bars</output>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemBass-2" aria-expanded="false" aria-controls="accordionItemBass-2">
+                      <input class="form-check-input bassEnabled" type="checkbox" name="bassEnabled" checked="checked">
+                      <span class="title">Bass</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemBass-2" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-2" style="">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select bassNoteLength" aria-label="bassNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input bassDynamicNoteLength" type="checkbox" name="bassDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="bassDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern</span>
+                          <input type="text" class="form-control bassDegreeNotesPattern" value="10-3010-20--10--30-20">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input bassStickToKick" type="checkbox" name="bassStickToKick" oninput="" checked="checked">
+                          <label class="form-check-label" for="bassStickToKick">Stick to kick pattern (ignore pattern above)</label>
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Dead/muted notes patterns</span>
+                          <input type="text" class="form-control bassDeadNotesPatterns" value="">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemGuitarOverdrive-2" aria-expanded="false" aria-controls="accordionItemGuitarOverdrive-2">
+                      <input class="form-check-input guitarOverdriveEnabled" type="checkbox" name="guitarOverdriveEnabled" checked="checked">
+                      <span class="title">Overdrive guitar</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemGuitarOverdrive-2" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-2" style="">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select guitarOverdriveNoteLength" aria-label="guitarOverdriveNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input guitarOverdriveDynamicNoteLength" type="checkbox" name="guitarOverdriveDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="guitarOverdriveDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern left</span>
+                          <input type="text" class="form-control guitarOverdriveDegreeNotesPaternLeft" value="10-3110-20--10--31-20">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern right</span>
+                          <input type="text" class="form-control guitarOverdriveDegreeNotesPaternRight" value="10-3110-20--10--31-20">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input guitarOverdriveStickToKick" type="checkbox" name="guitarOverdriveStickToKick" oninput="" checked="checked">
+                          <label class="form-check-label" for="guitarOverdriveStickToKick">Stick to kick pattern (ignore patterns above)</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Dead/muted/harmonic notes patterns left</span>
+                          <input type="text" class="form-control guitarOverdriveDeadNotesPatternsLeft" value="">
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Dead/muted/harmonic notes patterns right</span>
+                          <input type="text" class="form-control guitarOverdriveDeadNotesPatternsRight" value="">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemGuitarClean-2" aria-expanded="false" aria-controls="accordionItemGuitarClean-2">
+                      <input class="form-check-input guitarCleanEnabled" type="checkbox" name="guitarCleanEnabled">
+                      <span class="title">Clean guitar</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemGuitarClean-2" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-2">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select guitarCleanNoteLength" aria-label="guitarCleanNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input guitarCleanDynamicNoteLength" type="checkbox" name="guitarCleanDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="guitarCleanDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern left</span>
+                          <input type="text" class="form-control guitarCleanDegreeNotesPaternLeft" value="34---------------13---------------23---------------24---14-----------">
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern right</span>
+                          <input type="text" class="form-control guitarCleanDegreeNotesPaternRight" value="55---------------34---------------44---------------23---13-----------">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemSynth-2" aria-expanded="false" aria-controls="accordionItemSynth-2">
+                      <input class="form-check-input synthEnabled" type="checkbox" name="synthEnabled">
+                      <span class="title">Synth</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemSynth-2" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-2">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select synthNoteLength" aria-label="synthNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input synthDynamicNoteLength" type="checkbox" name="synthDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="synthDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern</span>
+                          <input type="text" class="form-control synthDegreeNotesPatern" value="21---------------11---------------">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 song-section-column">
+          <div class="song-section card m-3">
+            <div class="card-header">
+              <div class="row">
+                <div class="col">
+                  <div class="form-check checkbox-wrapper form-switch">
+                    <span>Section #4</span>
+                    <input class="form-check-input songSectionEnabled" type="checkbox" value="" checked="checked">
+                  </div>
+                </div>
+                <div class="col">
+                  <button type="button" class="btn btn-dark removeSongSection">✕</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="barsCount" class="form-label w-100">Bars count:</label>
+                <input class="w-75 barsCount" type="range" value="1" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' bars' : this.value + ' bar'">
+                <output style="position: relative; top: -2px;">1 bar</output>
+              </div>
+              <div class="mb-3">
+                <div class="row">
+                  <span>Time signature:</span>
+                  <div class="col align-self-center">
+                    <input class="w-50 timeSignatureBeats" type="range" value="26" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' beats of' : this.value + ' beat of'">
+                    <output style="position: relative; top: -2px;">26 beats of</output>
+                  </div>
+                  <div class="col">
+                    <div class="input-group">
+                      <span class="input-group-text">Note length: 1 / </span>
+                      <select class="form-select timeSignatureNoteLength" aria-label="Scale">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="8">8</option>
+                        <option value="16" selected="selected">16</option>
+                        <option value="32">32</option>
+                        <option value="64">64</option>
+                        <option value="128">128</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Grid resolution:</span>
+                  <select class="form-select gridResolution">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="8">8</option>
+                    <option value="16" selected="">16</option>
+                    <option value="32">32</option>
+                    <option value="64">64</option>
+                    <option value="128">128</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Scale</span>
+                  <select class="form-select scale" aria-label="Scale">
+                    <option value="HIRAJOSHI" selected="">Hirajoshi</option>
+                    <option value="HIRAJOSHI_2">Hirajoshi 2</option>
+                    <option value="IWATO">Iwato</option>
+                    <option value="KUMOI">Kumoi</option>
+                    <option value="PELOG">Pelog</option>
+                    <option value="DOUBLE_HARMONIC">Double harmonic</option>
+                    <option value="SIX_TONE_SYMMETRICAL">Six tone symmetrical</option>
+                    <option value="LOCRIAN">Locrian</option>
+                    <option value="PHRYGIAN">Phrygian</option>
+                    <option value="DIMINISHED_HALF">Diminished half</option>
+                  </select>
+                </div>
+              </div>
+              <div class="accordion" id="songSectionInstruments-3">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemDrums-3" aria-expanded="false" aria-controls="accordionItemDrums-3">
+                      <input class="form-check-input drumsEnabled" type="checkbox" name="drumsEnabled">
+                      <span class="title">Drums</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemDrums-3" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-3" style="">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Kick pattern</span>
+                          <input type="text" class="form-control kickPattern" value=".-..-.--.--.-." placeholder=".-..-.--.--.-.">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Snare pattern</span>
+                          <input type="text" class="form-control snarePattern" value="--------.-------" placeholder="--------.-------">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Rhythm cymbal pattern</span>
+                          <input type="text" class="form-control rhythmCymbalPattern" value=".---" placeholder=".---">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Accent cymbal patterns</span>
+                          <input type="text" class="form-control accentCymbalPatterns" value="-.-.-, -.....-.-">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input accentChokedCymbals" type="checkbox" name="ghostNoteType">
+                          <label class="form-check-label" for="accentChokedCymbals">Accent choked cymbals</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Fill patterns</span>
+                          <input type="text" class="form-control fillPatterns" value="skk, lkss">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input snareGhostNotes" type="checkbox" name="ghostNoteType" checked="checked">
+                          <label class="form-check-label" for="snareGhostNotes">Snare ghost notes</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input cymbalGhostNotes" type="checkbox" name="ghostNoteType" value="">
+                          <label class="form-check-label" for="cymbalGhostNotes">Cymbals ghost notes</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input cymbalsIntense" type="checkbox" value="" checked="checked">
+                          <label class="form-check-label" for="cymbalsIntense">Intense rhythm cymbals</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="changeCymbalNoteEveryNHits" class="form-label w-100">Change rhythm cymbal note every:</label>
+                        <input class="w-75 changeCymbalNoteEveryNHits" type="range" value="8" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' hits' : this.value + ' hit'">
+                        <output style="position: relative; top: -2px;">8 hits</output>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input addAccentAfterChangingRhythmCymbal" type="checkbox" value="" checked="checked">
+                          <label class="form-check-label" for="addAccentAfterChangingRhythmCymbal">Add accent after changing rhythm cymbal note</label>
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <label for="putFillsAfterNBars" class="form-label w-100">Put fills after every:</label>
+                        <input class="w-75 putFillsAfterNBars" type="range" value="4" min="1" max="64" oninput="this.nextElementSibling.value = this.value > 1 ? this.value + ' bars' : this.value + ' bar'">
+                        <output style="position: relative; top: -2px;">4 bars</output>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemBass-3" aria-expanded="false" aria-controls="accordionItemBass-3">
+                      <input class="form-check-input bassEnabled" type="checkbox" name="bassEnabled">
+                      <span class="title">Bass</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemBass-3" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-3" style="">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select bassNoteLength" aria-label="bassNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input bassDynamicNoteLength" type="checkbox" name="bassDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="bassDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern</span>
+                          <input type="text" class="form-control bassDegreeNotesPattern" value="10-3010-20--10--30-20">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input bassStickToKick" type="checkbox" name="bassStickToKick" oninput="" checked="checked">
+                          <label class="form-check-label" for="bassStickToKick">Stick to kick pattern (ignore pattern above)</label>
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Dead/muted notes patterns</span>
+                          <input type="text" class="form-control bassDeadNotesPatterns" value="d--">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemGuitarOverdrive-3" aria-expanded="false" aria-controls="accordionItemGuitarOverdrive-3">
+                      <input class="form-check-input guitarOverdriveEnabled" type="checkbox" name="guitarOverdriveEnabled" checked="checked">
+                      <span class="title">Overdrive guitar</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemGuitarOverdrive-3" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-3" style="">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select guitarOverdriveNoteLength" aria-label="guitarOverdriveNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input guitarOverdriveDynamicNoteLength" type="checkbox" name="guitarOverdriveDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="guitarOverdriveDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern left</span>
+                          <input type="text" class="form-control guitarOverdriveDegreeNotesPaternLeft" value="10-3110-20--10--31-1020-3110-20--10---">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern right</span>
+                          <input type="text" class="form-control guitarOverdriveDegreeNotesPaternRight" value="">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input guitarOverdriveStickToKick" type="checkbox" name="guitarOverdriveStickToKick" oninput="">
+                          <label class="form-check-label" for="guitarOverdriveStickToKick">Stick to kick pattern (ignore patterns above)</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Dead/muted/harmonic notes patterns left</span>
+                          <input type="text" class="form-control guitarOverdriveDeadNotesPatternsLeft" value="m--">
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Dead/muted/harmonic notes patterns right</span>
+                          <input type="text" class="form-control guitarOverdriveDeadNotesPatternsRight" value="">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemGuitarClean-3" aria-expanded="false" aria-controls="accordionItemGuitarClean-3">
+                      <input class="form-check-input guitarCleanEnabled" type="checkbox" name="guitarCleanEnabled">
+                      <span class="title">Clean guitar</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemGuitarClean-3" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-3">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select guitarCleanNoteLength" aria-label="guitarCleanNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input guitarCleanDynamicNoteLength" type="checkbox" name="guitarCleanDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="guitarCleanDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern left</span>
+                          <input type="text" class="form-control guitarCleanDegreeNotesPaternLeft" value="34---------------13---------------23---------------24---14-----------">
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern right</span>
+                          <input type="text" class="form-control guitarCleanDegreeNotesPaternRight" value="55---------------34---------------44---------------23---13-----------">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemSynth-3" aria-expanded="false" aria-controls="accordionItemSynth-3">
+                      <input class="form-check-input synthEnabled" type="checkbox" name="synthEnabled">
+                      <span class="title">Synth</span>
+                    </button>
+                  </h2>
+                  <div id="accordionItemSynth-3" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-3">
+                    <div class="accordion-body">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text">Note length: 1 / </span>
+                          <select class="form-select synthNoteLength" aria-label="synthNoteLength">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="16" selected="">16</option>
+                            <option value="32">32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input synthDynamicNoteLength" type="checkbox" name="synthDynamicNoteLength" checked="checked" oninput="">
+                          <label class="form-check-label" for="synthDynamicNoteLength">Dynamic note length</label>
+                        </div>
+                      </div>
+                      <div class="mb">
+                        <div class="input-group">
+                          <span class="input-group-text">Scale degree notes pattern</span>
+                          <input type="text" class="form-control synthDegreeNotesPatern" value="21---------------11---------------">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="tracksModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+              <h1 class="modal-title fs-6" id="tracksModalTitle">Download midi/audio files or reload page to re-groove</h1>
+          </div>
+          <div class="modal-body">
+            <div class="row justify-content-md-center">
+              <div class="column">
+                <div class="progress" role="progressbar" id="recordingProgressBar" aria-valuenow="100" aria-valuemin="1000" aria-valuemax="100" style="height: 30px">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated overflow-visible fs-6" style="width: 100%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success w-100" id="downloadMidi">Download midi</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="text-center text-lg-start text-muted mt-3">
+      <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+        <div class="mb-2">
+          <a class="text-reset fw-bold m-1" href="https://github.com/lpaultheguitarplayer/groove" target="_blank" style="text-decoration: none !important;">Groove</a>
+          <a class="text-reset fw-bold" href="https://github.com/lpaultheguitarplayer/groove/issues" target="_blank" style="text-decoration: none !important;">Feedback</a>
+        </div>
+        <span>© El Paul 2022-2023 Copyright</span>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
