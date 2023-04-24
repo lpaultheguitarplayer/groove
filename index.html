@@ -54,17 +54,28 @@
         height: 20px;
         margin-top: 0;
       }
+
+      footer .wrapper > * {
+        margin: 0 0.5rem 0 0.5rem;
+      }
     </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid m-1">
         <a class="navbar-brand" href="#">Groove</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="text-reset m-1" href="https://github.com/lpaultheguitarplayer/groove" target="_blank" style="text-decoration: none !important;">User guide</a>
+            </li>
+          </ul>
+        </div>
         <div class="player">
           <div class="wrapper">
               <input class="bpm" type="range" value="120" min="60" max="360" id="bpm" oninput="this.nextElementSibling.value = this.value + ' bpm';">
               <output class="text-center">120 bpm</output>
-              <button type="button" id="groove" data-bs-toggle="modal" data-bs-target="#tracksModal" class="btn btn-light">Groove</button>
+              <button type="button" id="groove" data-bs-toggle="modal" data-bs-target="#tracksModal" class="btn btn-light">▶</button>
               <button type="button" id="addSongSection" class="btn btn-secondary">+</button>
               <button type="button" id="reset" class="btn btn-secondary">Reset</button>
           </div>
@@ -74,12 +85,12 @@
     <div class="container">
       <div class="row justify-content-md-center song">
         <div class="col-6 song-section-column">
-          <div class="song-section card m-3">
+          <div class="song-section card m-3" id="song-section-1">
             <div class="card-header">
               <div class="row">
                 <div class="col">
                   <div class="form-check checkbox-wrapper form-switch">
-                    <span>Section #1</span>
+                    <span class="">Section #1</span>
                     <input class="form-check-input songSectionEnabled" type="checkbox" value="" checked="checked">
                   </div>
                 </div>
@@ -436,7 +447,7 @@
           </div>
         </div>
         <div class="col-6 song-section-column">
-          <div class="song-section card m-3">
+          <div class="song-section card m-3" id="song-section-2">
             <div class="card-header">
               <div class="row">
                 <div class="col">
@@ -798,7 +809,7 @@
           </div>
         </div>
         <div class="col-6 song-section-column">
-          <div class="song-section card m-3">
+          <div class="song-section card m-3" id="song-section-3">
             <div class="card-header">
               <div class="row">
                 <div class="col">
@@ -1160,7 +1171,7 @@
           </div>
         </div>
         <div class="col-6 song-section-column">
-          <div class="song-section card m-3">
+          <div class="song-section card m-3" id="song-section-4">
             <div class="card-header">
               <div class="row">
                 <div class="col">
@@ -1545,12 +1556,8 @@
       </div>
     </div>
     <footer class="text-center text-lg-start text-muted mt-3">
-      <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-        <div class="mb-2">
-          <a class="text-reset fw-bold m-1" href="https://github.com/lpaultheguitarplayer/groove" target="_blank" style="text-decoration: none !important;">Groove</a>
-          <a class="text-reset fw-bold" href="https://github.com/lpaultheguitarplayer/groove/issues" target="_blank" style="text-decoration: none !important;">Feedback</a>
-        </div>
-        <span>© El Paul 2022-2023 Copyright</span>
+      <div class="text-center p-4 wrapper" style="background-color: rgba(0, 0, 0, 0.05);">
+        <span>© El Paul 2022-2023 Copyright</span> | <a class="link-secondary" href="https://tonejs.github.io/" target="_blank">Powered by Tone.js</a> | <a class="link-secondary" href="https://github.com/lpaultheguitarplayer/groove/issues" target="_blank">Feedback</a>
       </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
