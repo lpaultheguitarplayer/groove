@@ -27,7 +27,7 @@ This is a script for generating songs in djent/thall genre by predefined rules t
 It's written using [Tone.js](https://tonejs.github.io/) Web Audio framework.
 ## How to use it?
 ### Player
-![](/public/help/player.png)
+![](/help/player.png)
 
 Script represents a simple sequencer that puts notes to the `grid` and plays them step by step. Set up the preferred tempo and hit `play` button. This will playback a predefined demo song just to show how things work.
 
@@ -35,7 +35,7 @@ Script represents a simple sequencer that puts notes to the `grid` and plays the
 
 All sections and their properties are saved between page reloads.
 ### Section
-![](/public/help/section.png)
+![](/help/section.png)
 
 Every section can be `muted` by a checkbox near the section title, so it will not be played by a sequencer. Also, it can be removed from the current song using `X` button (it can't be removed if there is only one section in the song).
 
@@ -54,7 +54,7 @@ Each section has instruments that can be enabled/disabled so that they won't be 
 ### Instruments
 Every instrument follows defined patterns. Each pattern loops inside the current section until the section's end (length defined by the `Bars count` setting). This idea allows thinking in patterns and kind of visualizes them. It was created this way just to ease composing polymeters.
 #### Drums
-![](/public/help/drums.png)
+![](/help/drums.png)
 
 Settings:
 - `Kick pattern`: dots are kicks, dashes are places without notes. Dot and dash have a length of the chosen section's grid resolution, in this particular example it's 1/16 of the note. For instance: this `.-..-.--.` pattern will look like a `.-..-.--..-..-.--..-..-.--..-..-` if section has 2 bars of 4/4 time signature which results in 32 1/16 notes.
@@ -70,7 +70,7 @@ Settings:
 - `Add accent after changing rhythm cymbal note`: adds accent crash cymbal note after changing rhythm cymbal note if enabled (and if there is a kick being played at the same time to sound more realistic).
 - `Put fills after every`: layers on fills every `N` defined bars in the section using `Fill patterns`.
 #### Bass
-![](/public/help/bass.png)
+![](/help/bass.png)
 
 Settings:
 - `Note length`: every note in the pattern will have this defined length.
@@ -79,7 +79,7 @@ Settings:
 - `Stick to kick pattern (ignore pattern above)`: instrument will pick notes from the pattern and will layer on those notes to the kick pattern instead of `Scale degree notes pattern` if enabled.
 - `Dead/muted notes patterns`: every time note pattern (or kick pattern if `Stick to kick pattern (ignore pattern above)` is enabled) contains a defined dead/muted notes pattern it will layer on dead/muted notes. Available notations are: `m` muted `A0` note, `d` dead `A0` note. Multiple patterns can be specified, divide them by `,` symbol.
 #### Overdrive guitar
-![](/public/help/overdrive_guitar.png)
+![](/help/overdrive_guitar.png)
 
 Settings:
 - `Note length`: every note in the pattern will have this defined length.
@@ -90,7 +90,7 @@ Settings:
 - `Dead/muted/harmonic notes patterns left`: every time note pattern (or kick pattern if `Stick to kick pattern (ignore pattern above)` is enabled) contains a defined dead/muted/harmonic notes pattern it will layer on dead/muted/harmonic notes for the left channel. Available notations are: `m` muted `A0` note, `d` dead `A0` note, `h` harmonic `A0` note. Multiple patterns can be specified, divide them by `,` symbol.
 - `Dead/muted/harmonic notes patterns right`: the same for the right channel.
 #### Clean guitar
-![](/public/help/clean_guitar.png)
+![](/help/clean_guitar.png)
 
 Settings:
 - `Note length`: every note in the pattern will have this defined length.
@@ -98,7 +98,7 @@ Settings:
 - `Scale degree notes pattern left`: pattern to play in the left channel. Every note is encoded with a 2-digit number: 1st digit is a note degree in the scale (1st, 2nd etc. and if no note is available then the latest note in the scale will be used), 2nd digit is an octave. For example, 31 is a 3rd note in the scale of the 1st octave.
 - `Scale degree notes pattern right`: pattern to play in the right channel. The same rules are applied here.
 #### Synth
-![](/public/help/synth.png)
+![](/help/synth.png)
 
 Settings:
 - `Note length`: every note in the pattern will have this defined length.
@@ -108,7 +108,7 @@ Settings:
 ### Midi
 Once `play` is clicked and the sequencer started playing the song it means that the midi file is already generated and can be downloaded right away. It's also possible to download the complete audio file after recording it.
 
-![](/public/help/recording.png)
+![](/help/recording.png)
 #### Midi mapping
 Channels:
 - Drums: 0
@@ -153,7 +153,7 @@ Drum notes:
 - RideCrash: F5
 - RideChoke: F#5
 ### Audio files
-![](/public/help/recorded.png)
+![](/help/recorded.png)
 
 Once the song is recorded it's possible to download audio files (in ogg format): file per instrument track + master track.
 ## Samples
