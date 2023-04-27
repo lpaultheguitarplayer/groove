@@ -57,7 +57,7 @@ Every instrument follows defined patterns. Each pattern loops inside the current
 ![](/help/drums.png)
 
 Settings:
-- `Kick pattern`: dots are kicks, dashes are places without notes. Dot and dash have a length of the chosen section's grid resolution, in this particular example it's 1/16 of the note. For instance: this `.-..-.--.` pattern will look like a `.-..-.--..-..-.--..-..-.--..-..-` if section has 2 bars of 4/4 time signature which results in 32 1/16 notes.
+- `Kick pattern`: dots are kicks (`T` for triplet kicks), dashes are places without notes. Dot and dash have a length of the chosen section's grid resolution, in this particular example it's 1/16 of the note. For instance: this `.-..-.--.` pattern will look like a `.-..-.--..-..-.--..-..-.--..-..-` if section has 2 bars of 4/4 time signature which results in 32 1/16 notes.
 - `Snare pattern`: the same idea here. Dots are snares.
 - `Rhythm cymbal pattern`: dots are randomly picked rhythm cymbals.
 - `Accent cymbal patterns`: every time kick pattern contains a defined accent pattern it will layer on the accent cymbal note. For example: if the accent pattern is `-.--` and the kick pattern is `.-..-.--` then the accent cymbal note will be layered on here `.-..-A--`. Dots are randomly picked crash cymbals (crashes, chinas, splashes). Multiple patterns can be specified, divide them by `,` symbol.
