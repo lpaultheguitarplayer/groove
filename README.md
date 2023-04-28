@@ -75,7 +75,7 @@ Settings:
 Settings:
 - `Note length`: every note in the pattern will have this defined length.
 - `Dynamic note length`: every note in the pattern will sound until the next note hits.
-- `Scale degree notes pattern`: pattern to play. Every note is encoded with a 2-digit number: 1st digit is a note degree in the scale (1st, 2nd etc. and if no note is available then the latest note in the scale will be used), 2nd digit is an octave. For example, 31 is a 3rd note in the scale of the 1st octave.
+- `Scale degree notes pattern`: pattern to play. Every note is encoded with a 2-digit number + 1 optional articulation symbol: 1st digit is a note degree in the scale (1st, 2nd etc. and if no note is available then the latest note in the scale will be used), 2nd digit is an octave, symbol - is an articulation (d - dead, m - muted, h - harmonic). For example, `31d` is a dead 3rd note in the scale of the 1st octave.
 - `Stick to kick pattern (ignore pattern above)`: instrument will pick notes from the pattern and will layer on those notes to the kick pattern instead of `Scale degree notes pattern` if enabled.
 - `Dead/muted notes patterns`: every time note pattern (or kick pattern if `Stick to kick pattern (ignore pattern above)` is enabled) contains a defined dead/muted notes pattern it will layer on dead/muted notes. Available notations are: `m` muted `A0` note, `d` dead `A0` note. Multiple patterns can be specified, divide them by `,` symbol.
 #### Overdrive guitar
@@ -84,7 +84,7 @@ Settings:
 Settings:
 - `Note length`: every note in the pattern will have this defined length.
 - `Dynamic note length`: every note in the pattern will sound until the next note hits.
-- `Scale degree notes pattern left`: pattern to play in the left channel. Every note is encoded with a 2-digit number: 1st digit is a note degree in the scale (1st, 2nd etc. and if no note is available then the latest note in the scale will be used), 2nd digit is an octave. For example, 31 is a 3rd note in the scale of the 1st octave.
+- `Scale degree notes pattern left`: pattern to play in the left channel. Every note is encoded with a 2-digit number + 1 optional articulation symbol: 1st digit is a note degree in the scale (1st, 2nd etc. and if no note is available then the latest note in the scale will be used), 2nd digit is an octave, symbol - is an articulation (d - dead, m - muted, h - harmonic). For example, `31d` is a dead 3rd note in the scale of the 1st octave.
 - `Scale degree notes pattern right`: pattern to play in the right channel. The same rules are applied here.
 - `Stick to kick pattern (ignore pattern above)`: instrument will pick notes from the pattern and will layer on those notes to the kick pattern instead of `Scale degree notes pattern left/right` if enabled.
 - `Dead/muted/harmonic notes patterns left`: every time note pattern (or kick pattern if `Stick to kick pattern (ignore pattern above)` is enabled) contains a defined dead/muted/harmonic notes pattern it will layer on dead/muted/harmonic notes for the left channel. Available notations are: `m` muted `A0` note, `d` dead `A0` note, `h` harmonic `A0` note. Multiple patterns can be specified, divide them by `,` symbol.
@@ -95,7 +95,7 @@ Settings:
 Settings:
 - `Note length`: every note in the pattern will have this defined length.
 - `Dynamic note length`: every note in the pattern will sound until the next note hits.
-- `Scale degree notes pattern left`: pattern to play in the left channel. Every note is encoded with a 2-digit number: 1st digit is a note degree in the scale (1st, 2nd etc. and if no note is available then the latest note in the scale will be used), 2nd digit is an octave. For example, 31 is a 3rd note in the scale of the 1st octave.
+- `Scale degree notes pattern left`: pattern to play in the left channel. Every note is encoded with a 2-digit number + 1 optional articulation symbol: 1st digit is a note degree in the scale (1st, 2nd etc. and if no note is available then the latest note in the scale will be used), 2nd digit is an octave, symbol - is an articulation (d - dead, m - muted, h - harmonic). For example, `31d` is a dead 3rd note in the scale of the 1st octave.
 - `Scale degree notes pattern right`: pattern to play in the right channel. The same rules are applied here.
 #### Synth
 ![](/help/synth.png)
@@ -103,7 +103,7 @@ Settings:
 Settings:
 - `Note length`: every note in the pattern will have this defined length.
 - `Dynamic note length`: every note in the pattern will sound until the next note hits.
-- `Scale degree notes pattern`: pattern to play. Every note is encoded with a 2-digit number: 1st digit is a note degree in the scale (1st, 2nd etc. and if no note is available then the latest note in the scale will be used), 2nd digit is an octave. For example, 31 is a 3rd note in the scale of the 1st octave.
+- `Scale degree notes pattern`: pattern to play. Every note is encoded with a 2-digit number + 1 optional articulation symbol: 1st digit is a note degree in the scale (1st, 2nd etc. and if no note is available then the latest note in the scale will be used), 2nd digit is an octave, symbol - is an articulation (d - dead, m - muted, h - harmonic). For example, `31d` is a dead 3rd note in the scale of the 1st octave.
 ## Download results
 ### Midi
 Once `play` is clicked and the sequencer started playing the song it means that the midi file is already generated and can be downloaded right away. It's also possible to download the complete audio file after recording it.
@@ -169,4 +169,3 @@ The same samples but processed with another Helix Native preset.
 GGD: "Architects" + Perfect Drums Player "Restrains" kits mixed together.
 ## Supported browsers
 In theory, every modern browser is supported, but I only tested it in Firefox and Chrome on macOS (should work on Windows and Linux machines as well). Works in `Firefox 112.0.1` and `Chrome 111.0.5563.64` (there might be some glitches in Chrome).
-
