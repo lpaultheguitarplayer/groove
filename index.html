@@ -147,11 +147,23 @@
               </div>
             </div>
             <div class="mb-3">
-              <div class="input-group">
-                <span class="input-group-text">Scale</span>
-                <select class="form-select scale" aria-label="Scale">
-                  {{#scaleOptions}}{{section.scale}}{{/scaleOptions}}
-                </select>
+              <div class="row">
+                <div class="col">
+                  <div class="input-group">
+                    <span class="input-group-text">Scale</span>
+                    <select class="form-select scale" aria-label="Scale">
+                      {{#scaleOptions}}{{section.scale}}{{/scaleOptions}}
+                    </select>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="input-group">
+                    <span class="input-group-text">Root note</span>
+                    <select class="form-select rootNoteName" aria-label="Root note">
+                      {{#noteOptions}}{{section.rootNoteName}}{{/noteOptions}}
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="accordion" id="songSectionInstruments-0">
