@@ -166,15 +166,15 @@
                 </div>
               </div>
             </div>
-            <div class="accordion" id="songSectionInstruments-0">
+            <div class="accordion" id="songSectionInstruments-{{section.id}}">
               <div class="accordion-item">
                 <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemDrums-0" aria-expanded="false" aria-controls="accordionItemDrums-0">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemDrums-{{section.id}}" aria-expanded="false" aria-controls="accordionItemDrums-{{section.id}}">
                     <input class="form-check-input drumsEnabled" type="checkbox" name="drumsEnabled" {{#section.drums.enabled}}checked="checked"{{/section.drums.enabled}}>
                     <span class="title">Drums</span>
                   </button>
                 </h2>
-                <div id="accordionItemDrums-0" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-0" style="">
+                <div id="accordionItemDrums-{{section.id}}" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-{{section.id}}" style="">
                   <div class="accordion-body">
                     <div class="mb-3">
                       <div class="input-group">
@@ -251,12 +251,12 @@
               </div>
               <div class="accordion-item">
                 <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemBass-0" aria-expanded="false" aria-controls="accordionItemBass-0">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemBass-{{section.id}}" aria-expanded="false" aria-controls="accordionItemBass-{{section.id}}">
                     <input class="form-check-input bassEnabled" type="checkbox" name="bassEnabled" {{#section.bass.enabled}}checked="checked"{{/section.bass.enabled}}>
                     <span class="title">Bass</span>
                   </button>
                 </h2>
-                <div id="accordionItemBass-0" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-0" style="">
+                <div id="accordionItemBass-{{section.id}}" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-{{section.id}}" style="">
                   <div class="accordion-body">
                     <div class="mb-3">
                       <div class="input-group">
@@ -295,12 +295,12 @@
               </div>
               <div class="accordion-item">
                 <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemGuitarOverdrive-0" aria-expanded="false" aria-controls="accordionItemGuitarOverdrive-0">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemGuitarOverdrive-{{section.id}}" aria-expanded="false" aria-controls="accordionItemGuitarOverdrive-{{section.id}}">
                     <input class="form-check-input guitarOverdriveEnabled" type="checkbox" name="guitarOverdriveEnabled" {{#section.overdriveGuitar.enabled}}checked="checked"{{/section.overdriveGuitar.enabled}}>
                     <span class="title">Overdrive guitar</span>
                   </button>
                 </h2>
-                <div id="accordionItemGuitarOverdrive-0" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-0" style="">
+                <div id="accordionItemGuitarOverdrive-{{section.id}}" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-{{section.id}}" style="">
                   <div class="accordion-body">
                     <div class="mb-3">
                       <div class="input-group">
@@ -351,12 +351,12 @@
               </div>
               <div class="accordion-item">
                 <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemGuitarClean-0" aria-expanded="false" aria-controls="accordionItemGuitarClean-0">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemGuitarClean-{{section.id}}" aria-expanded="false" aria-controls="accordionItemGuitarClean-{{section.id}}">
                     <input class="form-check-input guitarCleanEnabled" type="checkbox" name="guitarCleanEnabled" {{#section.cleanGuitar.enabled}}checked="checked"{{/section.cleanGuitar.enabled}}>
                     <span class="title">Clean guitar</span>
                   </button>
                 </h2>
-                <div id="accordionItemGuitarClean-0" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-0">
+                <div id="accordionItemGuitarClean-{{section.id}}" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-{{section.id}}">
                   <div class="accordion-body">
                     <div class="mb-3">
                       <div class="input-group">
@@ -389,12 +389,12 @@
               </div>
               <div class="accordion-item">
                 <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemSynth-0" aria-expanded="false" aria-controls="accordionItemSynth-0">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionItemSynth-{{section.id}}" aria-expanded="false" aria-controls="accordionItemSynth-{{section.id}}">
                     <input class="form-check-input synthEnabled" type="checkbox" name="synthEnabled" {{#section.synth.enabled}}checked="checked"{{/section.synth.enabled}}>
                     <span class="title">Synth</span>
                   </button>
                 </h2>
-                <div id="accordionItemSynth-0" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-0">
+                <div id="accordionItemSynth-{{section.id}}" class="accordion-collapse collapse" data-bs-parent="#songSectionInstruments-{{section.id}}">
                   <div class="accordion-body">
                     <div class="mb-3">
                       <div class="input-group">
