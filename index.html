@@ -39,7 +39,11 @@
         margin-right: 0.5rem;
       }
 
-      button.removeSongSection, button.minimizeSongSection, button.maximizeSongSection {
+      .player #reset {
+        margin-right: 0.5rem;
+      }
+
+      button.removeSongSection, button.minimizeSongSection, button.maximizeSongSection, .songSectionSoloedWrapper {
         float: right;
         margin-left: 0.5rem;
         width: 38px;
@@ -65,8 +69,14 @@
         margin: 0 0.5rem 0 0.5rem;
       }
 
+      .song-section .card-body,
+      .song-section .card-header .checkbox-wrapper {
+        transition: opacity 0.25s;
+      }
+
       .song-section .card-header {
         cursor: move;
+        transition: opacity 0.25s;
       }
 
       .song-section.minimized .card-header {
@@ -75,6 +85,23 @@
 
       .song-section.minimized .card-body {
         display: none;
+      }
+
+      .song-section.minimized button.minimizeSongSection {
+        display: none;
+      }
+
+      .song-section:not(.minimized) button.maximizeSongSection {
+        display: none;
+      }
+
+      .song-section:not(.enabled) {
+        opacity: 0.75;
+      }
+
+      .song-section:not(.enabled) .card-header .checkbox-wrapper,
+      .song-section:not(.enabled) .card-body {
+        opacity: 0.25;
       }
 
       .overlay {
@@ -94,24 +121,42 @@
         transition: opacity 0.3s ease-in-out;
         opacity: 0;
       }
+
+      .song-section {
+        transition: border-color 0.25s, opacity 0.25s;
+      }
+
+      .song-section.current-section {
+        animation: blinker 1s linear infinite;
+      }
+
+      @keyframes blinker {
+        50% {
+          opacity: 0.25;
+        }
+      }
     </style>
   </head>
   <body class="d-flex flex-column min-vh-100">
     <script id="song-section-column-template" type="x-tmpl-mustache">
       <div class="col-6 song-section-column">
-        <div class="song-section card m-3 {{#section.minimized}}minimized{{/section.minimized}}" id="{{section.id}}" draggable="true">
+        <div class="song-section card m-3 {{#section.minimized}}minimized{{/section.minimized}} {{#section.enabled}}enabled{{/section.enabled}}" id="{{section.id}}" draggable="true" style="border-color: {{section.color}}">
           <div class="card-header">
             <div class="row">
               <div class="col">
                 <div class="form-check checkbox-wrapper form-switch">
                   <span class="">{{section.title}}</span>
-                  <input class="form-check-input songSectionEnabled" type="checkbox" value="" {{#section.enabled}}checked="checked"{{/section.enabled}}>
+                  <input class="form-check-input songSectionEnabled" data-class-for-parent="enabled" type="checkbox" value="" {{#section.enabled}}checked="checked"{{/section.enabled}} {{#section.soloed}}disabled{{/section.soloed}}>
                 </div>
               </div>
               <div class="col">
-                <button type="button" class="btn btn-dark removeSongSection">✕</button>
-                <button type="button" class="btn btn-dark maximizeSongSection">□</button>
-                <button type="button" class="btn btn-dark minimizeSongSection">_</button>
+                <button type="button" class="btn btn-outline-danger removeSongSection">✕</button>
+                <button type="button" class="btn btn-outline-warning maximizeSongSection">□</button>
+                <button type="button" class="btn btn-outline-warning minimizeSongSection">_</button>
+                <span class="songSectionSoloedWrapper">
+                  <input type="checkbox" data-class-for-parent="soloed" class="songSectionSoloed btn-check" id="soloed-{{section.id}}" {{#section.soloed}}checked="checked"{{/section.soloed}} autocomplete="off">
+                  <label class="btn btn-outline-success" for="soloed-{{section.id}}">S</label>
+                </span>
               </div>
             </div>
           </div>
@@ -434,14 +479,16 @@
               <a class="text-reset m-1" href="https://github.com/lpaultheguitarplayer/groove" target="_blank" style="text-decoration: none !important;">User guide</a>
             </li>
           </ul>
+          <div id="song-name" class="font-weight-bold text-white w-75 text-center"></div>
         </div>
         <div class="player">
           <div class="wrapper">
               <input class="bpm" type="range" value="120" min="60" max="360" id="bpm" oninput="this.nextElementSibling.value = this.value + ' bpm';">
               <output class="text-center bpm">120 bpm</output>
-              <button type="button" id="groove" data-bs-toggle="modal" data-bs-target="#tracksModal" class="btn btn-light">▶</button>
+              <button type="button" id="groove" data-bs-toggle="modal" data-bs-target="#tracksModal" class="btn btn-light">▷</button>
               <button type="button" id="addSongSection" class="btn btn-secondary">+</button>
-              <button type="button" id="reset" class="btn btn-secondary">Reset</button>
+              <button type="button" id="reset" class="btn btn-secondary">↻</button>
+              <!-- <button type="button" id="randomize" class="btn btn-primary">Generate random song</button> -->
           </div>
         </div>
       </div>
