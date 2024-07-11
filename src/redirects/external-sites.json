@@ -1,3 +1,5 @@
 {
-    "/": "https://djent.app"
+    "/": "https://djent.app",
+    "/groove": "https://djent.app",
+    "/groove/": "https://djent.app"
 }
